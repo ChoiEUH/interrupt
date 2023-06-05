@@ -52,11 +52,23 @@ static void MX_GPIO_Init(void);
 static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 uint8_t flag = 0;
+char uart_buf[100];
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+void push(){
+	 if(flag == 1)
+	   {
+		 memset(uart_buf,0,sizeof(uart_buf));
+		   sprintf(uart_buf,"IT:%d\r\n", flag);
+		     	HAL_UART_Transmit(&huart3,uart_buf,sizeof(uart_buf),0xFFFF);
+		   HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_0);
+		   	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_7);
+		   	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_14);
+		   	flag = 0;
+		   	}
+}
 /* USER CODE END 0 */
 
 /**
@@ -97,12 +109,7 @@ int main(void)
   while (1)
   {
     /* USER CODE END WHILE */
-   if(flag == 1)
-   {
-	   HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_0);
-	   	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_7);
-	   	HAL_GPIO_TogglePin(GPIOB,GPIO_PIN_14);
-	   	flag = 0;
+push();
    }
     /* USER CODE BEGIN 3 */
   }
